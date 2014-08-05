@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" ng-app="famousAngularStarter">
+<html class="no-js" ng-app="famous-angular-todomvc">
   <head>
     <meta charset="utf-8">
     <title>Famo.us/Angular</title>
@@ -15,7 +15,7 @@
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-    <link rel="stylesheet" href="//code.famo.us/famous-angular/latest/famous-angular.css">
+    <link rel="stylesheet" href="bower_components/famous-angular/dist/famous-angular.css">
 
   </head>
   <body>
@@ -36,11 +36,11 @@
       require.config({baseUrl: 'bower_components'});
     </script>
     <script src="bower_components/underscore/underscore.js"></script>
-    <script src="//code.famo.us/famous-angular/latest/famous-angular.js"></script>
+    <script src="bower_components/famous-angular/dist/famous-angular.js"></script>
 
     <!-- build:js({app,.tmp}) scripts/main.js -->
-    <script src="scripts/famousAngularStarter.js"></script>
-    <script src="scripts/main/main-ctrl.js"></script>
+    <script src="scripts/famous-angular-todomvc.js"></script>
+    <script src="scripts/main/todo-ctrl.js"></script>
     <!-- inject:partials -->
     <!-- endinject -->
     <!-- endbuild -->
