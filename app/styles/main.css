@@ -184,46 +184,37 @@ label[for='toggle-all'] {
 }
 
 #todo-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
 }
 
-#todo-list li {
-    position: relative;
+.list-item {
     font-size: 24px;
     border-bottom: 1px dotted #ccc;
 }
 
-#todo-list li:last-child {
+.list-item:last-child {
     border-bottom: none;
 }
 
-#todo-list li.editing {
+.list-item.editing {
     border-bottom: none;
     padding: 0;
 }
 
-#todo-list li.editing .edit {
+.list-item.editing .edit {
     display: block;
     width: 506px;
     padding: 13px 17px 12px 17px;
     margin: 0 0 0 43px;
 }
 
-#todo-list li.editing .view {
-    display: none;
+.list-item.editing .view {
 }
 
-#todo-list li .toggle {
+.list-item .toggle {
     text-align: center;
     width: 40px;
     /* auto, since non-WebKit browsers doesn't support input styling */
     height: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin: auto 0;
     /* Mobile Safari */
     border: none;
     -webkit-appearance: none;
@@ -232,7 +223,7 @@ label[for='toggle-all'] {
     appearance: none;
 }
 
-#todo-list li .toggle:after {
+.list-item .toggle:after {
     content: '✔';
     /* 40 + a couple of pixels visual adjustment */
     line-height: 43px;
@@ -241,30 +232,29 @@ label[for='toggle-all'] {
     text-shadow: 0 -1px 0 #bfbfbf;
 }
 
-#todo-list li .toggle:checked:after {
+.list-item .toggle:checked:after {
     color: #85ada7;
     text-shadow: 0 1px 0 #669991;
     bottom: 1px;
     position: relative;
 }
 
-#todo-list li label {
+.list-item label {
     white-space: pre;
     word-break: break-word;
     padding: 15px 60px 15px 15px;
     margin-left: 45px;
-    display: block;
     line-height: 1.2;
     -webkit-transition: color 0.4s;
     transition: color 0.4s;
 }
 
-#todo-list li.completed label {
+.list-item.completed label {
     color: #a9a9a9;
     text-decoration: line-through;
 }
 
-#todo-list li .destroy {
+.list-item .destroy {
     display: none;
     position: absolute;
     top: 0;
@@ -279,7 +269,7 @@ label[for='toggle-all'] {
     transition: all 0.2s;
 }
 
-#todo-list li .destroy:hover {
+.list-item .destroy:hover {
     text-shadow: 0 0 1px #000,
                  0 0 10px rgba(199, 107, 107, 0.8);
     -webkit-transform: scale(1.3);
@@ -287,19 +277,19 @@ label[for='toggle-all'] {
     transform: scale(1.3);
 }
 
-#todo-list li .destroy:after {
+.list-item .destroy:after {
     content: '✖';
 }
 
-#todo-list li:hover .destroy {
+.list-item:hover .destroy {
     display: block;
 }
 
-#todo-list li .edit {
+.list-item .edit {
     display: none;
 }
 
-#todo-list li.editing:last-child {
+.list-item.editing:last-child {
     margin-bottom: -1px;
 }
 

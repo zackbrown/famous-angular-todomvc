@@ -24,7 +24,6 @@ angular.module('famous-angular-todomvc')
 
     var todos = $scope.todos = todoStorage.get();
 
-
     $scope.$watch('todos', function (newValue, oldValue) {
       $scope.todo.remainingCount = $filter('filter')(todos, { completed: false }).length;
       $scope.todo.completedCount = todos.length - $scope.todo.remainingCount;
@@ -33,8 +32,6 @@ angular.module('famous-angular-todomvc')
         todoStorage.put(todos);
       }
     }, true);
-
-
 
     $scope.todo = {
       newTodo: '',
@@ -55,16 +52,23 @@ angular.module('famous-angular-todomvc')
 
     $scope.addTodo = function (param) {
       var newTodo = $scope.todo.newTodo.trim();
-      console.log('new todo param', param)
       if (!newTodo.length) {
         return;
       }
 
-      todos.push({
+      var newIndex = todos.length;
+      var newTodo = {
         id: Math.random(),
         title: newTodo,
-        completed: false
-      });
+        completed: false,
+        presentation: {
+          scale: new Transitionable([1, 1, 1])
+        }
+      };
+
+      _decorateTodo(newTodo);
+
+      todos.push(newTodo);
 
       $scope.todo.newTodo = '';
     };
@@ -107,6 +111,27 @@ angular.module('famous-angular-todomvc')
 
     //PRESENTATION LOGIC
 
+
+    var _decorations = {};
+
+    var _decorateTodo = function(todo){
+      _decorations[todo.id] = {
+        scale: new Transitionable([1, .1, 1])
+      }
+    };
+
+    angular.forEach(todos, _decorateTodo);
+
+    var _getPresentation = $scope.getPresentation = function(todo){
+      return _decorations[todo.id];
+    };
+
+    $scope.scale = new Transitionable([1, .1, 1]);
+    $scope.animateIn = function(todo, $done){
+      _getPresentation(todo).scale.set([1, .1, 1]);
+      _getPresentation(todo).scale.set([1, 1, 1], {duration: 500, curve: 'easeOut'}, $done);
+    };
+
     var _sizes = $scope.sizes = {
       header: {
         height: 65
@@ -126,7 +151,5 @@ angular.module('famous-angular-todomvc')
     $scope.getTodoPosition = function(todo, index){
       return [0, index * _sizes.todo.height, 1];
     }
-
-    
 
   });

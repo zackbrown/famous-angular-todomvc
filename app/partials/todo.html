@@ -27,10 +27,24 @@
       </fa-surface>
  
       <!-- List of existing tasks -->
-      <fa-modifier id="existing-tasks" fa-translate="[0, sizes.topBar.height + sizes.header.height, 1]">
-          <fa-modifier ng-repeat="todo in todos" fa-size="[undefined, sizes.todo.height]" fa-translate="getTodoPosition(todo, $index)">
-            <fa-surface>{{todo.title}}</fa-surface>
-          </fa-modifier>
+      <fa-modifier id="todo-list" fa-translate="[0, sizes.topBar.height + sizes.header.height, 1]">
+        <fa-modifier
+          ng-repeat="todo in todos | filter:statusFilter track by todo.id"
+          fa-size="[undefined, sizes.todo.height]"
+          fa-translate="getTodoPosition(todo, $index)"
+          fa-animate-enter="animateIn(todo, $done)"
+          fa-scale="getPresentation(todo).scale.get()">
+          <fa-surface ng-class="{completed: todo.completed, editing: todo == editedTodo}" class="list-item">
+            <div class="view">
+              <input class="toggle" type="checkbox" ng-model="todo.completed">
+              <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
+              <button class="destroy" ng-click="removeTodo(todo)"></button>
+            </div>
+            <form ng-submit="doneEditing(todo)">
+              <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEditing(todo)" ng-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
+            </form>
+          </fa-surface>
+        </fa-modifier>
       </fa-modifier>
 
     </fa-modifier>
