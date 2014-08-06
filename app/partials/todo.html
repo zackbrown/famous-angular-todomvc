@@ -1,18 +1,45 @@
-<section id="todoapp">
-  <header id="header">
-    <h1>todos</h1>
-    <form id="todo-form" ng-submit="addTodo()">
-      <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" autofocus>
-    </form>
-  </header>
+<fa-app class="full-screen" id="todoapp">
+  <fa-modifier id="main-content" fa-size="[550, undefined]" fa-origin="[.5, 0]" fa-translate="[0, 30, 0]">
 
-  <fa-app class="full-screen">
+
+    <fa-modifier id="notepad" fa-origin="[.5, 0]" fa-translate="[0, 100, 1]" fa-size="[undefined, getNotepadHeight()]">
+      
+      <!-- Background panel -->
+      <fa-surface fa-background-color="'#FFF'"></fa-surface>
+
+      <!-- Red side-stripes  -->
+      <fa-modifier fa-origin="[0, 0]" fa-translate="[40, 0, 10]">
+        <fa-surface id="red-stripes"
+          fa-size="[4, undefined]"
+          fa-properties="{'border-left': '1px solid #f5d6d6',
+                          'border-right': '1px solid #f5d6d6'}">
+        </fa-surface>
+      </fa-modifier>
+      
+      <!-- Header -->
+      <fa-surface fa-size="[undefined, 65]">
+        <header id="header">
+          <h1>todos</h1>
+          <form id="todo-form" ng-submit="addTodo(newTodo)">
+            <input id="new-todo" placeholder="What needs to be done?" ng-model="todo.newTodo" autofocus>
+          </form>
+        </header>
+      </fa-surface>
+ 
+      <!-- List of existing tasks -->
+      <fa-modifier id="existing-tasks" fa-translate="[0, sizes.topBar.height + sizes.header.height, 1]">
+          <fa-modifier ng-repeat="todo in todos" fa-size="[undefined, sizes.todo.height]" fa-translate="getTodoPosition(todo, $index)">
+            <fa-surface>{{todo.title}}</fa-surface>
+          </fa-modifier>
+      </fa-modifier>
+
+    </fa-modifier>
 
     <!-- Container modifier, which we're rotating over the y axis -->
     <fa-modifier fa-origin="[.5, .5]" fa-rotate-y="rotateY.get()">
 
       <!-- Front face -->
-      <fa-surface fa-size="[true, true]" fa-color="'rgb(255,255,250)'">
+      <fa-surface id="front" fa-size="[true, true]" fa-color="'rgb(255,255,250)'">
         <img class="logo" src="images/famous-logo.svg" style="width: 200px; height: 200px;"/>
       </fa-surface>
 
@@ -30,5 +57,6 @@
         <input style="width: 100%; text-align: center;" type="range" min="10" max="100" ng-model="spinner.speed" />
       </fa-surface>
     </fa-modifier>
-  </fa-app>
-</section>
+
+  </fa-modifier>
+</fa-app>

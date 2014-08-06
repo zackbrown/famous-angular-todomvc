@@ -6,7 +6,7 @@
 /*************************************************************************/
 
 angular.module('famous-angular-todomvc')
-  .controller('TodoCtrl', function ($scope, $famous, $stateParams, todoStorage) {
+  .controller('TodoCtrl', function ($scope, $famous, $stateParams, $filter, todoStorage) {
     var Transitionable = $famous['famous/transitions/Transitionable'];
     var Timer = $famous['famous/utilities/Timer'];
     $scope.spinner = {
@@ -24,8 +24,25 @@ angular.module('famous-angular-todomvc')
 
     var todos = $scope.todos = todoStorage.get();
 
-    $scope.newTodo = '';
-    $scope.editedTodo = null;
+
+    $scope.$watch('todos', function (newValue, oldValue) {
+      $scope.todo.remainingCount = $filter('filter')(todos, { completed: false }).length;
+      $scope.todo.completedCount = todos.length - $scope.todo.remainingCount;
+      $scope.todo.allChecked = !$scope.todo.remainingCount;
+      if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+        todoStorage.put(todos);
+      }
+    }, true);
+
+
+
+    $scope.todo = {
+      newTodo: '',
+      editedTodo: null,
+      originalTodo: {}    
+    }
+    $scope.todo.newTodo = '';
+    $scope.todo.editedTodo = null;
 
     // Monitor the current route for changes and adjust the filter accordingly.
     $scope.$on('$stateChangeSuccess', function () {
@@ -36,23 +53,24 @@ angular.module('famous-angular-todomvc')
         { completed: true } : null;
     });
 
-    $scope.addTodo = function () {
-      var newTodo = $scope.newTodo.trim();
+    $scope.addTodo = function (param) {
+      var newTodo = $scope.todo.newTodo.trim();
+      console.log('new todo param', param)
       if (!newTodo.length) {
         return;
       }
 
       todos.push({
+        id: Math.random(),
         title: newTodo,
         completed: false
       });
 
-      $scope.newTodo = '';
+      $scope.todo.newTodo = '';
     };
 
-
     $scope.editTodo = function (todo) {
-      $scope.editedTodo = todo;
+      $scope.todo.editedTodo = todo;
       // Clone the original todo to restore it on demand.
       $scope.originalTodo = angular.extend({}, todo);
     };
@@ -86,6 +104,28 @@ angular.module('famous-angular-todomvc')
         todo.completed = !completed;
       });
     };
+
+    //PRESENTATION LOGIC
+
+    var _sizes = $scope.sizes = {
+      header: {
+        height: 65
+      },
+      topBar: {
+        height: 15
+      },
+      todo: {
+        height: 65
+      }
+    };
+
+    $scope.getNotepadHeight = function(){
+      return  todos.length * _sizes.todo.height + _sizes.header.height + _sizes.topBar.height;
+    }
+
+    $scope.getTodoPosition = function(todo, index){
+      return [0, index * _sizes.todo.height, 1];
+    }
 
     
 
