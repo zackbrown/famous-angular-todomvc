@@ -8,7 +8,10 @@
 angular.module('famous-angular-todomvc')
   .controller('TodoCtrl', function ($scope, $famous, $stateParams, $filter, todoStorage) {
     var Transitionable = $famous['famous/transitions/Transitionable'];
+    var Easing = $famous['famous/transitions/Easing'];
     var Timer = $famous['famous/utilities/Timer'];
+
+
     $scope.spinner = {
       speed: 200
     };
@@ -128,9 +131,13 @@ angular.module('famous-angular-todomvc')
 
     $scope.scale = new Transitionable([1, .1, 1]);
     $scope.animateIn = function(todo, $done){
-      _getPresentation(todo).scale.set([1, .1, 1]);
-      _getPresentation(todo).scale.set([1, 1, 1], {duration: 500, curve: 'easeOut'}, $done);
+      _getPresentation(todo).scale.set([.1, 1, 1]);
+      _getPresentation(todo).scale.set([1, 1, 1], {duration: 500, curve: Easing.outBounce}, $done);
     };
+
+    $scope.animateOut = function(todo, $done){
+      $done()
+    }
 
     var _sizes = $scope.sizes = {
       header: {

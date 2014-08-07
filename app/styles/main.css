@@ -187,6 +187,7 @@ label[for='toggle-all'] {
 }
 
 .list-item {
+    padding-top: 8px;
     font-size: 24px;
     border-bottom: 1px dotted #ccc;
 }
@@ -243,7 +244,6 @@ label[for='toggle-all'] {
     white-space: pre;
     word-break: break-word;
     padding: 15px 60px 15px 15px;
-    margin-left: 45px;
     line-height: 1.2;
     -webkit-transition: color 0.4s;
     transition: color 0.4s;

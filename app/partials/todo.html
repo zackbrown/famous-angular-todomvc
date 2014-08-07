@@ -33,7 +33,11 @@
           fa-size="[undefined, sizes.todo.height]"
           fa-translate="getTodoPosition(todo, $index)"
           fa-animate-enter="animateIn(todo, $done)"
-          fa-scale="getPresentation(todo).scale.get()">
+          fa-animate-leave="animateOut(todo, $done)"
+          fa-origin="[.5, 0]"
+          fa-align="[.5, 0]"
+          fa-scale="getPresentation(todo).scale.get()"
+          fa-transform-order="['translate', 'scale']">
           <fa-surface ng-class="{completed: todo.completed, editing: todo == editedTodo}" class="list-item">
             <div class="view">
               <input class="toggle" type="checkbox" ng-model="todo.completed">
@@ -50,7 +54,7 @@
     </fa-modifier>
 
     <!-- Container modifier, which we're rotating over the y axis -->
-    <fa-modifier fa-origin="[.5, .5]" fa-rotate-y="rotateY.get()">
+    <fa-modifier fa-origin="[.5, .5]" fa-rotate-y="rotateY.get()" fa-translate="[0, 0, 1000]" fa-transform-order="['traslate', 'rotateY']">
 
       <!-- Front face -->
       <fa-surface id="front" fa-size="[true, true]" fa-color="'rgb(255,255,250)'">
