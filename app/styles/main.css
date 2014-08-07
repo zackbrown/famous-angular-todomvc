@@ -298,7 +298,7 @@ label[for='toggle-all'] {
     padding: 0 15px;
     position: absolute;
     right: 0;
-    bottom: -31px;
+    top: -18px;
     left: 0;
     height: 20px;
     z-index: 1;

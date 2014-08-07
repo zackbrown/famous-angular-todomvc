@@ -9,23 +9,18 @@ angular.module('famous-angular-todomvc')
   .controller('TodoCtrl', function ($scope, $famous, $stateParams, $filter, todoStorage) {
     var Transitionable = $famous['famous/transitions/Transitionable'];
     var Easing = $famous['famous/transitions/Easing'];
-    var Timer = $famous['famous/utilities/Timer'];
 
-
-    $scope.spinner = {
-      speed: 200
-    };
-    $scope.rotateY = new Transitionable(0);
-
-    //run function on every tick of the Famo.us engine
-    Timer.every(function(){
-      var adjustedSpeed = parseFloat($scope.spinner.speed) / 1200;
-      $scope.rotateY.set($scope.rotateY.get() + adjustedSpeed);
-    }, 1);
-
-
+    var _decorateTodo = function(todo){
+      todo.transform = {
+        scale: new Transitionable([1, 1, 1]),
+        translate: new Transitionable([0, 0, 1])
+      }
+    }
 
     var todos = $scope.todos = todoStorage.get();
+    angular.forEach(todos, function(todo){
+      _decorateTodo(todo);
+    })
 
     $scope.$watch('todos', function (newValue, oldValue) {
       $scope.todo.remainingCount = $filter('filter')(todos, { completed: false }).length;
@@ -63,10 +58,7 @@ angular.module('famous-angular-todomvc')
       var newTodo = {
         id: Math.random(),
         title: newTodo,
-        completed: false,
-        presentation: {
-          scale: new Transitionable([1, 1, 1])
-        }
+        completed: false
       };
 
       _decorateTodo(newTodo);
@@ -115,31 +107,17 @@ angular.module('famous-angular-todomvc')
     //PRESENTATION LOGIC
 
 
-    var _decorations = {};
 
-    var _decorateTodo = function(todo){
-      _decorations[todo.id] = {
-        scale: new Transitionable([1, .1, 1])
-      }
-    };
-
-    angular.forEach(todos, _decorateTodo);
-
-    var _getPresentation = $scope.getPresentation = function(todo){
-      return _decorations[todo.id];
-    };
-
-    $scope.scale = new Transitionable([1, .1, 1]);
     $scope.animateIn = function(todo, $done){
-      _getPresentation(todo).scale.set([.1, 1, 1]);
-      _getPresentation(todo).scale.set([1, 1, 1], {duration: 500, curve: Easing.outBounce}, $done);
+      todo.transform.scale.set([.1, 1, 1]);
+      todo.transform.scale.set([1, 1, 1], {duration: 500, curve: Easing.outBounce}, $done);
     };
 
     $scope.animateOut = function(todo, $done){
-      $done()
+      todo.transform.translate.set([window.innerWidth, 0, 1], {duration: 1000, curve: Easing.inBounce}, $done);
     }
 
-    var _sizes = $scope.sizes = {
+    var sizes = $scope.sizes = {
       header: {
         height: 65
       },
@@ -148,15 +126,31 @@ angular.module('famous-angular-todomvc')
       },
       todo: {
         height: 65
+      },
+      footer: {
+        height: 20
       }
     };
 
     $scope.getNotepadHeight = function(){
-      return  todos.length * _sizes.todo.height + _sizes.header.height + _sizes.topBar.height;
+      return  todos.length * sizes.todo.height + sizes.header.height + sizes.topBar.height;
     }
 
     $scope.getTodoPosition = function(todo, index){
-      return [0, index * _sizes.todo.height, 1];
+      return [0, index * sizes.todo.height, 1];
+    }
+
+    var layout = $scope.layout = {
+      notepad: {
+        height: function(){
+          return  todos.length * sizes.todo.height + sizes.header.height + sizes.topBar.height;
+        }
+      },
+      footer: {
+        translate: function(){
+          return [0, sizes.topBar.height + sizes.header.height + layout.notepad.height() + 50, 1];
+        }
+      }
     }
 
   });

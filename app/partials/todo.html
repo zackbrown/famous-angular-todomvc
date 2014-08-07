@@ -1,8 +1,8 @@
 <fa-app class="full-screen" id="todoapp">
+
   <fa-modifier id="main-content" fa-size="[550, undefined]" fa-origin="[.5, 0]" fa-translate="[0, 30, 0]">
 
-
-    <fa-modifier id="notepad" fa-origin="[.5, 0]" fa-translate="[0, 100, 1]" fa-size="[undefined, getNotepadHeight()]">
+    <fa-modifier id="notepad" fa-origin="[.5, 0]" fa-translate="[0, 100, 1]" fa-size="[undefined, layout.notepad.height()]">
       
       <!-- Background panel -->
       <fa-surface fa-background-color="'#FFF'"></fa-surface>
@@ -36,45 +36,57 @@
           fa-animate-leave="animateOut(todo, $done)"
           fa-origin="[.5, 0]"
           fa-align="[.5, 0]"
-          fa-scale="getPresentation(todo).scale.get()"
+          fa-scale="todo.transform.scale.get()"
           fa-transform-order="['translate', 'scale']">
-          <fa-surface ng-class="{completed: todo.completed, editing: todo == editedTodo}" class="list-item">
-            <div class="view">
-              <input class="toggle" type="checkbox" ng-model="todo.completed">
-              <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
-              <button class="destroy" ng-click="removeTodo(todo)"></button>
-            </div>
-            <form ng-submit="doneEditing(todo)">
-              <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEditing(todo)" ng-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
-            </form>
-          </fa-surface>
+          <fa-modifier id="translation-modifier" fa-translate="todo.transform.translate.get()">
+            <fa-modifier fa-translate="[0, 0, -1]"><fa-surface fa-background-color="'#FFF'"></fa-surface></fa-modifier>
+            <fa-surface ng-class="{completed: todo.completed, editing: todo == editedTodo}" class="list-item">
+              <div class="view">
+                <input class="toggle" type="checkbox" ng-model="todo.completed">
+                <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
+                <button class="destroy" ng-click="removeTodo(todo)"></button>
+              </div>
+              <form ng-submit="doneEditing(todo)">
+                <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEditing(todo)" ng-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
+              </form>
+            </fa-surface>
+          </fa-modifier>
         </fa-modifier>
       </fa-modifier>
-
     </fa-modifier>
 
-    <!-- Container modifier, which we're rotating over the y axis -->
-    <fa-modifier fa-origin="[.5, .5]" fa-rotate-y="rotateY.get()" fa-translate="[0, 0, 1000]" fa-transform-order="['traslate', 'rotateY']">
-
-      <!-- Front face -->
-      <fa-surface id="front" fa-size="[true, true]" fa-color="'rgb(255,255,250)'">
-        <img class="logo" src="images/famous-logo.svg" style="width: 200px; height: 200px;"/>
-      </fa-surface>
-
-      <!-- Back face:  same image, rotated pi radians -->
-      <fa-modifier fa-rotate-y="3.14159">
-        <fa-surface fa-size="[true, true]" fa-color="'rgb(255,255,250)'">
-          <img class="logo" src="images/famous-logo.svg" style="width: 200px; height: 200px;" />
-        </fa-surface>
-      </fa-modifier>
-
-    </fa-modifier>
-
-    <fa-modifier fa-origin="[.5, .9]" fa-size="[200, 100]">
+    <!-- Footer -->
+    <fa-modifier fa-translate="layout.footer.translate()">
       <fa-surface>
-        <input style="width: 100%; text-align: center;" type="range" min="10" max="100" ng-model="spinner.speed" />
+        <footer id="footer" ng-show="todos.length" ng-cloak>
+          <span id="todo-count"><strong>{{remainingCount}}</strong>
+            <ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+          </span>
+          <ul id="filters">
+            <li>
+              <a ng-class="{selected: status == ''} " href="#/">All</a>
+            </li>
+            <li>
+              <a ng-class="{selected: status == 'active'}" href="#/active">Active</a>
+            </li>
+            <li>
+              <a ng-class="{selected: status == 'completed'}" href="#/completed">Completed</a>
+            </li>
+          </ul>
+          <button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed ({{completedCount}})</button>
+        </footer>
+        <footer id="info">
+          <p>Double-click to edit a todo</p>
+          <p>Credits:
+            <a href="http://twitter.com/cburgdorf">Christoph Burgdorf</a>,
+            <a href="http://ericbidelman.com">Eric Bidelman</a>,
+            <a href="http://jacobmumm.com">Jacob Mumm</a> and
+            <a href="http://igorminar.com">Igor Minar</a>
+          </p>
+          <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+        </footer>
       </fa-surface>
     </fa-modifier>
 
-  </fa-modifier>
+
 </fa-app>
