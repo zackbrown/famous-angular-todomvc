@@ -132,10 +132,6 @@ angular.module('famous-angular-todomvc')
       }
     };
 
-    $scope.getNotepadHeight = function(){
-      return  todos.length * sizes.todo.height + sizes.header.height + sizes.topBar.height;
-    }
-
     $scope.getTodoPosition = function(todo, index){
       return [0, index * sizes.todo.height, 1];
     }
@@ -143,7 +139,7 @@ angular.module('famous-angular-todomvc')
     var layout = $scope.layout = {
       notepad: {
         height: function(){
-          return  todos.length * sizes.todo.height + sizes.header.height + sizes.topBar.height;
+          return  $filter('filter')(todos, $scope.statusFilter).length * sizes.todo.height + sizes.header.height + sizes.topBar.height;
         }
       },
       footer: {
