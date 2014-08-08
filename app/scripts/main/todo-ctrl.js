@@ -23,21 +23,21 @@ angular.module('famous-angular-todomvc')
     })
 
     $scope.$watch('todos', function (newValue, oldValue) {
-      $scope.todo.remainingCount = $filter('filter')(todos, { completed: false }).length;
-      $scope.todo.completedCount = todos.length - $scope.todo.remainingCount;
-      $scope.todo.allChecked = !$scope.todo.remainingCount;
+      $scope.todoModel.remainingCount = $filter('filter')(todos, { completed: false }).length;
+      $scope.todoModel.completedCount = todos.length - $scope.todoModel.remainingCount;
+      $scope.todoModel.allChecked = !$scope.todoModel.remainingCount;
       if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
         todoStorage.put(todos);
       }
     }, true);
 
-    $scope.todo = {
+    $scope.todoModel = {
       newTodo: '',
       editedTodo: null,
       originalTodo: {}    
     }
-    $scope.todo.newTodo = '';
-    $scope.todo.editedTodo = null;
+    $scope.todoModel.newTodo = '';
+    $scope.todoModel.editedTodo = null;
 
     // Monitor the current route for changes and adjust the filter accordingly.
     $scope.$on('$stateChangeSuccess', function () {
@@ -49,7 +49,7 @@ angular.module('famous-angular-todomvc')
     });
 
     $scope.addTodo = function (param) {
-      var newTodo = $scope.todo.newTodo.trim();
+      var newTodo = $scope.todoModel.newTodo.trim();
       if (!newTodo.length) {
         return;
       }
@@ -65,17 +65,17 @@ angular.module('famous-angular-todomvc')
 
       todos.push(newTodo);
 
-      $scope.todo.newTodo = '';
+      $scope.todoModel.newTodo = '';
     };
 
     $scope.editTodo = function (todo) {
-      $scope.todo.editedTodo = todo;
+      $scope.todoModel.editedTodo = todo;
       // Clone the original todo to restore it on demand.
       $scope.originalTodo = angular.extend({}, todo);
     };
 
     $scope.doneEditing = function (todo) {
-      $scope.editedTodo = null;
+      $scope.todoModel.editedTodo = null;
       todo.title = todo.title.trim();
 
       if (!todo.title) {

@@ -201,14 +201,15 @@ label[for='toggle-all'] {
     padding: 0;
 }
 
-.list-item.editing .edit {
+.list-item .edit {
     display: block;
-    width: 506px;
     padding: 13px 17px 12px 17px;
-    margin: 0 0 0 43px;
+    margin: 0 43px 0 43px;
+    width: 507px;
 }
 
 .list-item.editing .view {
+    display: none;
 }
 
 .list-item .toggle {
@@ -283,10 +284,6 @@ label[for='toggle-all'] {
 
 .list-item:hover .destroy {
     display: block;
-}
-
-.list-item .edit {
-    display: none;
 }
 
 .list-item.editing:last-child {

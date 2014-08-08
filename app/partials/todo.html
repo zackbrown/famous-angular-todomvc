@@ -8,7 +8,7 @@
       <fa-surface fa-background-color="'#FFF'"></fa-surface>
 
       <!-- Red side-stripes  -->
-      <fa-modifier fa-origin="[0, 0]" fa-translate="[40, 0, 10]">
+      <fa-modifier fa-origin="[0, 0]" fa-translate="[40, sizes.topBar.height, 10]" fa-size="[undefined, layout.notepad.height() - sizes.topBar.height]">
         <fa-surface id="red-stripes"
           fa-size="[4, undefined]"
           fa-properties="{'border-left': '1px solid #f5d6d6',
@@ -21,7 +21,7 @@
         <header id="header">
           <h1>todos</h1>
           <form id="todo-form" ng-submit="addTodo(newTodo)">
-            <input id="new-todo" placeholder="What needs to be done?" ng-model="todo.newTodo" autofocus>
+            <input id="new-todo" placeholder="What needs to be done?" ng-model="todoModel.newTodo" autofocus>
           </form>
         </header>
       </fa-surface>
@@ -40,15 +40,17 @@
           fa-transform-order="['translate', 'scale']">
           <fa-modifier id="translation-modifier" fa-translate="todo.transform.translate.get()">
             <fa-modifier fa-translate="[0, 0, -1]"><fa-surface fa-background-color="'#FFF'"></fa-surface></fa-modifier>
-            <fa-surface ng-class="{completed: todo.completed, editing: todo == editedTodo}" class="list-item">
-              <div class="view">
-                <input class="toggle" type="checkbox" ng-model="todo.completed">
-                <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
-                <button class="destroy" ng-click="removeTodo(todo)"></button>
+            <fa-surface>
+              <div ng-class="{completed: todo.completed, editing: todo == editedTodo}" class="list-item">
+                <div class="view" ng-show="todoModel.editedTodo != todo">
+                  <input class="toggle" type="checkbox" ng-model="todo.completed">
+                  <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
+                  <button class="destroy" ng-click="removeTodo(todo)"></button>
+                </div>
+                <form ng-submit="doneEditing(todo)" ng-show="todoModel.editedTodo == todo">
+                  <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEditing(todo)" ng-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
+                </form>
               </div>
-              <form ng-submit="doneEditing(todo)">
-                <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEditing(todo)" ng-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
-              </form>
             </fa-surface>
           </fa-modifier>
         </fa-modifier>
@@ -78,13 +80,13 @@
         <footer id="info">
           <p>Double-click to edit a todo</p>
           <p>Credits:
-            <a href="http://twitter.com/zackaboo">Zack Brown</a>,
             <a href="http://twitter.com/cburgdorf">Christoph Burgdorf</a>,
             <a href="http://ericbidelman.com">Eric Bidelman</a>,
-            <a href="http://jacobmumm.com">Jacob Mumm</a> and
-            <a href="http://igorminar.com">Igor Minar</a>
+            <a href="http://jacobmumm.com">Jacob Mumm</a>,
+            <a href="http://igorminar.com">Igor Minar</a> and
+            <a href="http://twitter.com/zackaboo">Zack Brown</a>
           </p>
-          <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+          <!-- <p>Part of <a href="http://todomvc.com">TodoMVC</a></p> -->
         </footer>
       </fa-surface>
     </fa-modifier>
