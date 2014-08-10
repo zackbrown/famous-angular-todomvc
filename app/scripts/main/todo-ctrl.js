@@ -106,8 +106,6 @@ angular.module('famous-angular-todomvc')
 
     //PRESENTATION LOGIC
 
-
-
     $scope.animateIn = function(todo, $done){
       todo.transform.scale.set([.1, 1, 1]);
       todo.transform.scale.set([1, 1, 1], {duration: 500, curve: Easing.outBounce}, $done);
